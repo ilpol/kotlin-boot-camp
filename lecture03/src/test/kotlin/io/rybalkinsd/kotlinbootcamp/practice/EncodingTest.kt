@@ -45,7 +45,7 @@ class EncodingTest {
 
     @Test
     fun `decode # Abc`() {
-        assertEquals("Abc", "AlfaBravoCharlie".decode())
+        assertEquals("abc", "AlfaBravoCharlie".decode())
     }
 
     @Test
