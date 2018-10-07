@@ -1,5 +1,6 @@
 package io.rybalkinsd.kotlinbootcamp.geometry
-
+import kotlin.math.max
+import kotlin.math.min
 /**
  * Entity that can physically intersect, like flame and player
  */
@@ -10,10 +11,39 @@ interface Collider {
 /**
  * 2D point with integer coordinates
  */
-class Point(x: Int, y: Int) : Collider {
+data class Point(var x: Int,var y: Int) : Collider {
     override fun isColliding(other: Collider): Boolean {
-        TODO("not implemented")
+        return when (other) {
+            is Point -> {
+                if((x == other.x) && (y == other.y))
+                    true
+                else
+                    false
+            }
+
+            is Bar -> {
+
+                if(other.firstCornerX <= x && x <= other.secondCornerX && other.firstCornerY <= y && y <= other.secondCornerY)
+                    true
+                else
+                    false
+            }
+            else -> false
+        }
     }
+    override fun equals(other: Any?): Boolean {
+        return when (other) {
+            is Point -> {
+                if (x == other.x && y == other.y)
+                    true
+                else
+                    false
+            }
+            else
+            -> false
+        }
+    }
+
 }
 
 /**
@@ -22,8 +52,42 @@ class Point(x: Int, y: Int) : Collider {
  * Bar is not oriented
  * (It does not matter, which opposite corners you choose to define bar)
  */
-class Bar(firstCornerX: Int, firstCornerY: Int, secondCornerX: Int, secondCornerY: Int) : Collider {
+data class Bar(var firstCornerX: Int,var firstCornerY: Int,var secondCornerX: Int,var secondCornerY: Int) : Collider {
+
+  init{
+      if (firstCornerX > secondCornerX) {
+          var tmp = firstCornerX
+          firstCornerX = secondCornerX
+          secondCornerX = tmp
+      }
+      if (firstCornerY > secondCornerY) {
+          var tmp = firstCornerY
+          firstCornerY = secondCornerY
+          secondCornerY = tmp
+      }
+  }
+
+
     override fun isColliding(other: Collider): Boolean {
-        TODO("not implemented")
+        return when (other) {
+            is Point -> {
+                if(firstCornerX <= other.x && other.x <= secondCornerX && firstCornerY <= other.y && other.y <= secondCornerY)
+                    true
+                else
+                    false
+
+            }
+
+            is Bar -> {
+
+                if(firstCornerX>other.secondCornerX || secondCornerX<other.firstCornerX || firstCornerY>other.secondCornerY||secondCornerY<other.firstCornerY)
+                {
+                         false
+                }
+                else
+                    true
+            }
+            else -> false
+        }
     }
 }
