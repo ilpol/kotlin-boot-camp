@@ -3,10 +3,8 @@ package io.rybalkinsd.kotlinbootcamp.practice
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 
-@Ignore
 class EncodingTest {
 
     @Test
@@ -40,11 +38,6 @@ class EncodingTest {
 
     @Test
     fun `decode # abc`() {
-        assertEquals("abc", "AlfaBravoCharlie".decode())
-    }
-
-    @Test
-    fun `decode # Abc`() {
         assertEquals("abc", "AlfaBravoCharlie".decode())
     }
 
