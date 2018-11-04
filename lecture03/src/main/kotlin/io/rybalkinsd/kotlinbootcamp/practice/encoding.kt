@@ -17,7 +17,7 @@ val association: Map<Char, String> = alphabet.associate { it[0].toLowerCase() to
  * "abc".encode() == "AlfaBravoCharlie"
  *
  */
-fun String.encode(): String = map { it.toLowerCase() }.map { association.get(it) ?: it }.joinToString("")
+fun String.encode(): String = map { it.toLowerCase() }.map { association[it] ?: it }.joinToString("")
 /**
  * A reversed mapping for association
  * [ alpha -> a, bravo -> b, ...]
@@ -34,59 +34,23 @@ val reversedAssociation: Map<String, Char> = alphabet.associate { it to it[0] }
  *
  */
 fun String.decode(): String? {
-    var input_str = this
-    var result_final = ""
-    var digits = ""
-    var result = ""
+    var res = ""
+    var input = this
     var word = ""
-    for (words in input_str.split(" ")) {
-        var words_1 = words
-        while (words_1 != "") {
-            digits = find_digits(words_1)
-            words_1 = words_1.removePrefix(digits)
-            word = find_Word(words_1)
-            if (word != "") {
-                result = result + digits + (words_1[0]).toLowerCase()
-                words_1 = words_1.removePrefix(word)
-            } else {
-                return null
-            }
+    for (letter in input) {
+        if (letter in '0'..'9' || letter == ' ') {
+            res += letter
+            continue
         }
-        if (result != "") {
-            result_final = result_final + " " + result
-            result = ""
-        } else
-            return null
-    }
-    if ((result_final[0]) == ' ')
-        return result_final.removePrefix(" ")
-    else
-        return result_final
-}
-
-fun find_Word(str: String?): String {
-    var tmp_String = ""
-    if (str != null) {
-        for (letter in str) {
-            tmp_String = tmp_String + letter
-            for (i in alphabet) {
-                if (tmp_String.toLowerCase() == i.toLowerCase()) {
-                    return tmp_String
-                }
-            }
+        word += letter
+        if (reversedAssociation[word] != null) {
+            res += (reversedAssociation[word])
+            res = res.toLowerCase()
+            word = ""
         }
-        return ""
     }
-    return ""
-}
-fun find_digits(str: String?): String {
-    var result = ""
-    if (str != null) {
-        for (i in str) {
-            if (i in '0'..'9')
-                result = result + i
-        }
-        return result
+    when (word) {
+        "" -> return res
+        else -> return null
     }
-    return result
 }
